@@ -13,17 +13,17 @@ jobs:
       id: sif-cache
       uses: actions/cache@v1
       with:
-        path: impr.sif
+        path: imprsif
         key: ${{ runner.os }}-${{ hashFiles('singularity.def') }}-${{ hashfiles('environment.yml') }}
     - name: Package installation
       if: steps.sif-cache.outputs.cache-hit != 'true'
       run: sudo apt-get install singularity-container
     - name: Container build
       if: steps.sif-cache.outputs.cache-hit != 'true'
-      run: sudo singularity build impr.sif singularity.def
+      run: mkdir -p imprsif; sudo singularity build imprsif/impr.sif singularity.def
     - name: Container check
       if: steps.sif-cache.outputs.cache-hit != 'true'
-      run: singularity exec impr.sif python -c 'import iris; print(iris.__version__)'
+      run: singularity exec imprsif/impr.sif python -c 'import iris; print(iris.__version__)'
 
   test:
     name: ${{ matrix.step.name }}
@@ -51,4 +51,4 @@ jobs:
     - name: Package installation
       run: sudo apt-get install singularity-container
     - name: Run ${{ matrix.step.name }}
-      run: singularity exec impr.sif ${{ matrix.step.cmd }}
+      run: singularity exec imprsif/impr.sif ${{ matrix.step.cmd }}
