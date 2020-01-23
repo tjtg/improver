@@ -46,7 +46,7 @@ jobs:
     - name: Container image cache
       uses: actions/cache@v1
       with:
-        path: impr.sif
+        path: imprsif
         key: impr.sif-${{ runner.os }}-${{ hashFiles('singularity.def') }}-${{ hashfiles('environment.yml') }}
     - name: Package installation
       run: sudo apt-get install singularity-container
