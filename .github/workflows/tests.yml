@@ -13,7 +13,7 @@ jobs:
       id: sif-cache
       uses: actions/cache@v1
       with:
-        path: imprsif
+        path: impr.sif
         key: ${{ runner.os }}-${{ hashFiles('singularity.def') }}-${{ hashfiles('environment.yml') }}
     - name: Package installation
       if: steps.sif-cache.outputs.cache-hit != 'true'
@@ -24,78 +24,31 @@ jobs:
     - name: Container check
       if: steps.sif-cache.outputs.cache-hit != 'true'
       run: singularity exec impr.sif python -c 'import iris; print(iris.__version__)'
-    - name: Container image split
-      if: steps.sif-cache.outputs.cache-hit != 'true'
-      run: mkdir imprsif; split --bytes=100M impr.sif imprsif/sifpart; rm impr.sif
 
-  pytest:
-    needs: singularity
+  test:
+    name: ${{ matrix.step.name }}
     runs-on: ubuntu-latest
+    needs: singularity
+    strategy:
+      matrix:
+        step:
+        - name: pytest
+          cmd: pytest
+        - name: pycodestyle
+          cmd: pycodestyle improver improver_tests
+        - name: pylint
+          cmd: pylint -j 0 -E --rcfile=etc/pylintrc improver improver_tests
+        - name: sphinx
+          cmd: make -C doc html
     steps:
     - name: Checkout
       uses: actions/checkout@v1
     - name: Container image cache
       uses: actions/cache@v1
       with:
-        path: imprsif
+        path: impr.sif
         key: ${{ runner.os }}-${{ hashFiles('singularity.def') }}-${{ hashfiles('environment.yml') }}
-    - name: Container image setup
-      run: cat imprsif/sifpart* > impr.sif; rm -r imprsif
     - name: Package installation
       run: sudo apt-get install singularity-container
-    - name: Pytest
-      run: singularity exec impr.sif pytest
-
-  pycodestyle:
-    needs: singularity
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v1
-    - name: Container image cache
-      uses: actions/cache@v1
-      with:
-        path: imprsif
-        key: ${{ runner.os }}-${{ hashFiles('singularity.def') }}-${{ hashfiles('environment.yml') }}
-    - name: Container image setup
-      run: cat imprsif/sifpart* > impr.sif; rm -r imprsif
-    - name: Package installation
-      run: sudo apt-get install singularity-container
-    - name: Pycodestyle
-      run: singularity exec impr.sif pycodestyle improver improver_tests
-
-  sphinx:
-    needs: singularity
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v1
-    - name: Container image cache
-      uses: actions/cache@v1
-      with:
-        path: imprsif
-        key: ${{ runner.os }}-${{ hashFiles('singularity.def') }}-${{ hashfiles('environment.yml') }}
-    - name: Container image setup
-      run: cat imprsif/sifpart* > impr.sif; rm -r imprsif
-    - name: Package installation
-      run: sudo apt-get install singularity-container
-    - name: Sphinx
-      run: cd doc; singularity exec ../impr.sif make html
-
-  pylint:
-    needs: singularity
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v1
-    - name: Container image cache
-      uses: actions/cache@v1
-      with:
-        path: imprsif
-        key: ${{ runner.os }}-${{ hashFiles('singularity.def') }}-${{ hashfiles('environment.yml') }}
-    - name: Container image setup
-      run: cat imprsif/sifpart* > impr.sif; rm -r imprsif
-    - name: Package installation
-      run: sudo apt-get install singularity-container
-    - name: Pylint
-      run: singularity exec impr.sif pylint -j 0 -E --rcfile=etc/pylintrc improver improver_tests
+    - name: Run ${{ matrix.step.name }}
+      run: singularity exec impr.sif ${{ matrix.step.cmd }}
