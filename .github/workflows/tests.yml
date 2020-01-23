@@ -14,7 +14,7 @@ jobs:
       uses: actions/cache@v1
       with:
         path: imprsif
-        key: ${{ runner.os }}-${{ hashFiles('singularity.def') }}-${{ hashfiles('environment.yml') }}
+        key: impr.sif-${{ runner.os }}-${{ hashFiles('singularity.def') }}-${{ hashfiles('environment.yml') }}
     - name: Package installation
       if: steps.sif-cache.outputs.cache-hit != 'true'
       run: sudo apt-get install singularity-container
@@ -47,7 +47,7 @@ jobs:
       uses: actions/cache@v1
       with:
         path: impr.sif
-        key: ${{ runner.os }}-${{ hashFiles('singularity.def') }}-${{ hashfiles('environment.yml') }}
+        key: impr.sif-${{ runner.os }}-${{ hashFiles('singularity.def') }}-${{ hashfiles('environment.yml') }}
     - name: Package installation
       run: sudo apt-get install singularity-container
     - name: Run ${{ matrix.step.name }}
