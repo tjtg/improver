@@ -27,3 +27,8 @@ etc/site-init
 # Code coverage files
 lib/.coverage
 lib/coverage.xml
+
+# Build files
+/build
+/dist
+/*.egg-info
