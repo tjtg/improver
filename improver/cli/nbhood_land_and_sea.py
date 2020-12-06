@@ -82,9 +82,8 @@ def process(
             Return sum rather than fraction over the neighbourhood area.
 
     Returns:
-        (tuple): tuple containing:
-            **result** (iris.cube.Cube):
-                A cube of the processed data.
+        iris.cube.Cube:
+            A cube of the processed data.
 
     Raises:
         ValueError:
