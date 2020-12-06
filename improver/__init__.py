@@ -31,6 +31,40 @@
 """Module containing plugin base class."""
 from abc import ABC, abstractmethod
 
+__all__ = [
+    "between_thresholds",
+    "blending",
+    "calculate_sleet_prob",
+    "calibration",
+    "cli",
+    "constants",
+    "convection",
+    "cube_combiner",
+    "ensemble_copula_coupling",
+    "feels_like_temperature",
+    "field_texture",
+    "generate_ancillaries",
+    "grids",
+    "lapse_rate",
+    "memprofile",
+    "metadata",
+    "nbhood",
+    "nowcasting",
+    "orographic_enhancement",
+    "percentile",
+    "profile",
+    "psychrometric_calculations",
+    "snow_fraction",
+    "spotdata",
+    "standardise",
+    "synthetic_data",
+    "threshold",
+    "utilities",
+    "uv_index",
+    "wind_calculations",
+    "wxcode",
+]
+
 
 class BasePlugin(ABC):
     """An abstract class for IMPROVER plugins.
