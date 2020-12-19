@@ -5,7 +5,8 @@ with open("README.md", "r") as long_desc_file:
 
 setuptools.setup(
     name="improver",
-    version="0.13.0",
+    use_scm_version=True,
+    setup_requires=["setuptools_scm"],
     author="UK Met Office",
     author_email="ben.fitzpatrick@metoffice.gov.uk",
     description="Integrated Mdel post PROcessing and VERification",
