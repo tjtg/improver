@@ -31,4 +31,5 @@ lib/coverage.xml
 # Build files
 /build
 /dist
+/.eggs
 /*.egg-info
