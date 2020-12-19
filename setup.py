@@ -20,9 +20,28 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     python_requires=">=3.6",
-    install_requires=["scitools-iris>=2.2", "clize>=4.1.0", "sphinx", "scitools-pyke"],
+    install_requires=[
+        "scitools-iris==2.2",
+        "clize",
+        "sphinx",
+        "scitools-pyke",
+        "cftime==1.0.1",
+        "numpy",
+        "six",
+        "stratify",
+    ],
     extras_require={
-        "dev": ["pytest>=5.0", "black==19.10b0", "isort==4.3.21", "pylint==2.4.4"]
+        "dev": [
+            "pytest",
+            "black==19.10b0",
+            "isort==4.3.21",
+            "pylint==2.4.4",
+            "bandit",
+            "safety",
+            "filelock",
+            "mock",
+        ],
+        "full": ["pysteps"],
     },
     scripts=["bin/improver"],
 )
