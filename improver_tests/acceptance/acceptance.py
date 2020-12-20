@@ -37,8 +37,10 @@ import os
 import pathlib
 import shlex
 import shutil
+import urllib.request
 
 import pytest
+import filelock
 
 from improver import cli
 from improver.constants import DEFAULT_TOLERANCE
@@ -46,6 +48,7 @@ from improver.utilities.compare import compare_netcdfs
 
 RECREATE_DIR_ENVVAR = "RECREATE_KGO"
 ACC_TEST_DIR_ENVVAR = "IMPROVER_ACC_TEST_DIR"
+ACC_TEST_ONLINE_ENVVAR = "IMPROVER_ACC_TEST_DOWNLOAD"
 IGNORE_CHECKSUMS = "IMPROVER_IGNORE_CHECKSUMS"
 ACC_TEST_DIR_MISSING = pathlib.Path("/dev/null")
 DEFAULT_CHECKSUM_FILE = pathlib.Path(__file__).parent / "SHA256SUMS"
@@ -68,6 +71,8 @@ def run_cli(cli_name, verbose=True):
     """
 
     def run_function(args):
+        if online_test_data():
+            download_missing_files(args)
         if not checksum_ignore():
             verify_checksums(args)
         cli.main("improver", cli_name, *args, verbose=verbose)
@@ -192,6 +197,15 @@ def verify_checksums(cli_arglist):
         cli_arglist (List[Union[str,pathlib.Path]]): list of arguments being
             passed to a CLI such as via improver.cli.main function.
     """
+    path_args = filter_cli_file_args(cli_arglist)
+    for arg in path_args:
+        # expand any globs in the argument and verify each of them
+        arg_globs = list(arg.parent.glob(arg.name))
+        for arg_glob in arg_globs:
+            verify_checksum(arg_glob)
+
+
+def filter_cli_file_args(cli_arglist):
     # copy the arglist as it will be edited to remove output args
     arglist = cli_arglist.copy()
     # if there is an --output argument, remove the path in the following argument
@@ -217,16 +231,58 @@ def verify_checksums(cli_arglist):
         raise ValueError(msg)
     # verify checksums of remaining path-type arguments
     path_args = [arg for arg in arglist if isinstance(arg, pathlib.Path)]
-    for arg in path_args:
-        # expand any globs in the argument and verify each of them
-        arg_globs = list(arg.parent.glob(arg.name))
-        for arg_glob in arg_globs:
-            verify_checksum(arg_glob)
+    return path_args
+
+
+def download_missing_files(cli_arglist):
+    path_args = filter_cli_file_args(cli_arglist)
+    url_prefix = online_test_data()
+    checksums = acceptance_checksums()
+    for path in path_args:
+        if path.exists():
+            continue
+        expected_checksum = checksums[path.resolve().relative_to(kgo_root())]
+        data_url = url_prefix + str(expected_checksum)
+        print(f"downloading {data_url} -> {path}")
+        path.parent.mkdir(parents=True, exist_ok=True)
+        req = urllib.request.Request(
+            data_url, headers={"User-Agent": "IMPROVER acceptance test"}
+        )
+        with urllib.request.urlopen(req, timeout=30) as response:
+            data = response.read()
+            hasher = hashlib.sha256()
+            hasher.update(data)
+            response_hash = hasher.hexdigest()
+            if response_hash != expected_checksum:
+                raise ValueError(
+                    f"downloaded data checksum mismatch,"
+                    f"expected {expected_checksum} got {response_hash}"
+                )
+        lock_path = str(path.with_suffix(".lock"))
+        lock = filelock.FileLock(lock_path)
+        lock.acquire(timeout=10)
+        try:
+            with open(path, "wb") as out_file:
+                out_file.write(data)
+            print("download completed ok")
+        except filelock.Timeout:
+            raise IOError(f'unable to lock {path} for writing')
+        finally:
+            lock.release()
+
 
 
 def checksum_ignore():
     """True if CHECKSUMs should be checked"""
     return os.getenv(IGNORE_CHECKSUMS, "false").lower() == "true"
+
+
+def online_test_data():
+    try:
+        url_prefix = os.environ[ACC_TEST_ONLINE_ENVVAR]
+    except KeyError:
+        return None
+    return url_prefix
 
 
 def kgo_recreate():
@@ -349,6 +405,9 @@ def compare(
         raise ValueError("atol")
     if not isinstance(rtol, (int, float)):
         raise ValueError("rtol")
+
+    if online_test_data():
+        download_missing_files([kgo_path])
 
     difference_found = False
     message = ""
