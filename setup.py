@@ -1,6 +1,10 @@
+"""Python package installation"""
+
+from pathlib import Path
+
 import setuptools
 
-with open("README.md", "r") as long_desc_file:
+with open(Path(__file__).parent / "README.md", "r") as long_desc_file:
     long_description = long_desc_file.read()
 
 setuptools.setup(
