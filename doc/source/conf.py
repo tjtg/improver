@@ -126,7 +126,7 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This patterns also effect to html_static_path and html_extra_path
-exclude_patterns = ["modules.rst", "extended_documentation"]
+exclude_patterns = ["modules.rst", "extended_documentation", "setup.rst"]
 
 # The reST default role (used for this markup: `text`) to use for all
 # documents.
@@ -411,8 +411,9 @@ def run_apidoc(_):
     from sphinx.ext.apidoc import main
 
     output_dir = os.path.dirname(os.path.abspath(__file__))
-    exclude_dir = os.path.join(SOURCE_DIR, "improver_tests")
-    main(["-e", "-P", "-f", "-o", output_dir, SOURCE_DIR, exclude_dir])
+    tests_dir = os.path.join(SOURCE_DIR, "improver_tests")
+    setup_code = os.path.join(SOURCE_DIR, "setup.py")
+    main(["-e", "-P", "-f", "-o", output_dir, SOURCE_DIR, tests_dir, setup_code])
 
 
 def setup(app):
