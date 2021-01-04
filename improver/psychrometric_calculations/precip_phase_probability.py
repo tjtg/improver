@@ -36,7 +36,7 @@ import iris
 import numpy as np
 from cf_units import Unit
 
-from improver import BasePlugin
+from improver.plugin import BasePlugin
 from improver.metadata.utilities import (
     create_new_diagnostic_cube,
     generate_mandatory_attributes,

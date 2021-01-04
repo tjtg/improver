@@ -38,7 +38,7 @@ import numpy as np
 from cf_units import Unit
 from iris.exceptions import CoordinateNotFoundError
 
-from improver import BasePlugin, PostProcessingPlugin
+from improver.plugin import BasePlugin, PostProcessingPlugin
 from improver.constants import RMDI
 
 # Scale parameter to determine reference height

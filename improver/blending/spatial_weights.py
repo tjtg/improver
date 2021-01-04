@@ -36,7 +36,7 @@ import iris
 import numpy as np
 from scipy.ndimage.morphology import distance_transform_edt
 
-from improver import BasePlugin
+from improver.plugin import BasePlugin
 from improver.metadata.constants import FLOAT_DTYPE
 from improver.utilities.cube_manipulation import get_dim_coord_names
 from improver.utilities.rescale import rescale

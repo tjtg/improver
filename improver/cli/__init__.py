@@ -43,6 +43,7 @@ from clize.runner import Clize
 from sigtools.wrappers import decorator
 
 __all__ = [
+    # CLIs
     "aggregate_reliability_tables",
     "apply_emos_coefficients",
     "apply_lapse_rate",
@@ -105,6 +106,17 @@ __all__ = [
     "wind_downscaling",
     "wind_gust_diagnostic",
     "wxcode",
+    # functions
+    "clizefy",
+    "create_constrained_inputcubelist_converter",
+    "docutilize",
+    "inputcube",
+    "inputcubelist",
+    "inputjson",
+    "maybe_coerce_with",
+    "run_main",
+    "unbracket",
+    "with_output",
 ]
 
 # Imports are done in their functions to make calls to -h quicker.

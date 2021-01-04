@@ -33,7 +33,7 @@
 import iris
 import numpy as np
 
-from improver import BasePlugin
+from improver.plugin import BasePlugin
 from improver.metadata.constants import FLOAT_DTYPE
 from improver.metadata.probabilistic import (
     extract_diagnostic_name,

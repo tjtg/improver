@@ -34,7 +34,7 @@ import iris
 import numpy as np
 from iris.exceptions import CoordinateNotFoundError
 
-from improver import BasePlugin, PostProcessingPlugin
+from improver.plugin import BasePlugin, PostProcessingPlugin
 from improver.constants import DALR
 from improver.metadata.utilities import (
     create_new_diagnostic_cube,

@@ -41,7 +41,7 @@ import numpy as np
 from iris.coords import AuxCoord
 from iris.exceptions import CoordinateNotFoundError, InvalidCubeError
 
-from improver import BasePlugin
+from improver.plugin import BasePlugin
 from improver.metadata.amend import amend_attributes, set_history_attribute
 from improver.metadata.constants.time_types import TIME_COORDS
 from improver.metadata.utilities import (

@@ -35,7 +35,7 @@ import warnings
 import iris
 import numpy as np
 
-from improver import BasePlugin
+from improver.plugin import BasePlugin
 from improver.constants import TRIPLE_PT_WATER
 
 

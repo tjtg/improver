@@ -39,7 +39,7 @@ from iris.cube import CubeList
 from stratify import interpolate
 
 import improver.constants as consts
-from improver import BasePlugin
+from improver.plugin import BasePlugin
 from improver.generate_ancillaries.generate_svp_table import (
     SaturatedVapourPressureTable,
 )

@@ -46,7 +46,7 @@ from scipy import stats
 from scipy.optimize import minimize
 from scipy.stats import norm
 
-from improver import BasePlugin, PostProcessingPlugin
+from improver.plugin import BasePlugin, PostProcessingPlugin
 from improver.calibration.utilities import (
     check_forecast_consistency,
     check_predictor,

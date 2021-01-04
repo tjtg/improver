@@ -35,7 +35,7 @@ import iris
 import numpy as np
 from iris.exceptions import CoordinateNotFoundError
 
-from improver import BasePlugin
+from improver.plugin import BasePlugin
 from improver.constants import DEFAULT_PERCENTILES
 from improver.metadata.probabilistic import find_percentile_coordinate
 from improver.utilities.cube_manipulation import collapsed

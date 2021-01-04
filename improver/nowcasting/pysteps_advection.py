@@ -35,7 +35,7 @@ from datetime import timedelta
 import numpy as np
 from iris.coords import AuxCoord
 
-from improver import BasePlugin
+from improver.plugin import BasePlugin
 from improver.metadata.amend import amend_attributes, set_history_attribute
 from improver.metadata.utilities import generate_mandatory_attributes
 from improver.nowcasting.utilities import ApplyOrographicEnhancement

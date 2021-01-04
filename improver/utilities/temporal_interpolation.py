@@ -36,7 +36,7 @@ import iris
 import numpy as np
 from iris.exceptions import CoordinateNotFoundError
 
-from improver import BasePlugin
+from improver.plugin import BasePlugin
 from improver.metadata.constants.time_types import TIME_COORDS
 from improver.utilities.cube_manipulation import MergeCubes
 from improver.utilities.round import round_close

@@ -39,7 +39,7 @@ from iris.analysis import Linear, Nearest
 from iris.exceptions import CoordinateNotFoundError
 from scipy.interpolate import griddata
 
-from improver import BasePlugin
+from improver.plugin import BasePlugin
 from improver.metadata.amend import amend_attributes
 from improver.metadata.check_datatypes import (
     check_units,

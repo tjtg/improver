@@ -35,7 +35,7 @@ import operator
 import iris
 import numpy as np
 
-from improver import BasePlugin
+from improver.plugin import BasePlugin
 from improver.metadata.constants.attributes import MANDATORY_ATTRIBUTE_DEFAULTS
 from improver.metadata.utilities import create_new_diagnostic_cube
 from improver.utilities.cube_manipulation import enforce_coordinate_ordering

@@ -35,7 +35,7 @@ import iris
 import numpy as np
 from iris.exceptions import CoordinateNotFoundError
 
-from improver import BasePlugin
+from improver.plugin import BasePlugin
 from improver.metadata.probabilistic import find_threshold_coordinate
 from improver.metadata.utilities import (
     create_new_diagnostic_cube,

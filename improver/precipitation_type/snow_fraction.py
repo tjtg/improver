@@ -34,7 +34,7 @@
 import iris
 import numpy as np
 
-from improver import PostProcessingPlugin
+from improver.plugin import PostProcessingPlugin
 from improver.metadata.utilities import (
     create_new_diagnostic_cube,
     generate_mandatory_attributes,

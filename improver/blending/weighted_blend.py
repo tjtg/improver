@@ -39,7 +39,7 @@ from iris.analysis import Aggregator
 from iris.coords import AuxCoord
 from iris.exceptions import CoordinateNotFoundError
 
-from improver import BasePlugin, PostProcessingPlugin
+from improver.plugin import BasePlugin, PostProcessingPlugin
 from improver.metadata.amend import amend_attributes
 from improver.metadata.constants import FLOAT_DTYPE
 from improver.metadata.constants.attributes import (

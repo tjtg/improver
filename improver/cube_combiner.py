@@ -37,7 +37,7 @@ import numpy as np
 from iris.cube import CubeList
 from iris.exceptions import CoordinateNotFoundError
 
-from improver import BasePlugin
+from improver.plugin import BasePlugin
 from improver.metadata.check_datatypes import enforce_dtype
 from improver.metadata.probabilistic import (
     extract_diagnostic_name,

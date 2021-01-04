@@ -35,7 +35,7 @@ import warnings
 import iris
 import numpy as np
 
-from improver import PostProcessingPlugin
+from improver.plugin import PostProcessingPlugin
 from improver.metadata.probabilistic import find_percentile_coordinate
 
 

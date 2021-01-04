@@ -37,7 +37,7 @@ import iris
 import numpy as np
 import scipy
 
-from improver import BasePlugin, PostProcessingPlugin
+from improver.plugin import BasePlugin, PostProcessingPlugin
 from improver.calibration.utilities import (
     check_forecast_consistency,
     create_unified_frt_coord,

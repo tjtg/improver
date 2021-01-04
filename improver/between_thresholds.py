@@ -35,7 +35,7 @@ import iris
 import numpy as np
 from iris.exceptions import CoordinateNotFoundError
 
-from improver import PostProcessingPlugin
+from improver.plugin import PostProcessingPlugin
 from improver.metadata.probabilistic import (
     extract_diagnostic_name,
     find_threshold_coordinate,

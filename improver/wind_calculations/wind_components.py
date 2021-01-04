@@ -37,7 +37,7 @@ from iris.coord_systems import GeogCS
 from iris.coords import DimCoord
 from iris.cube import Cube
 
-from improver import BasePlugin
+from improver.plugin import BasePlugin
 from improver.utilities.cube_manipulation import compare_coords
 
 # Global coordinate reference system used in StaGE (GRS80)

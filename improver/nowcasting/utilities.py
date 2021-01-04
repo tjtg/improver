@@ -35,7 +35,7 @@ import iris
 import numpy as np
 from cf_units import Unit
 
-from improver import BasePlugin
+from improver.plugin import BasePlugin
 from improver.utilities import neighbourhood_tools
 from improver.utilities.temporal import (
     extract_nearest_time_point,

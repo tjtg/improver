@@ -36,7 +36,7 @@ import copy
 import iris
 import numpy as np
 
-from improver import BasePlugin
+from improver.plugin import BasePlugin
 from improver.metadata.probabilistic import (
     extract_diagnostic_name,
     find_threshold_coordinate,

@@ -37,7 +37,7 @@ import iris
 import numpy as np
 from scipy.interpolate import interp1d
 
-from improver import BasePlugin
+from improver.plugin import BasePlugin
 from improver.utilities.cube_manipulation import (
     check_cube_coordinates,
     sort_coord_in_cube,

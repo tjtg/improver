@@ -32,7 +32,7 @@
 
 import numpy as np
 
-from improver import BasePlugin
+from improver.plugin import BasePlugin
 from improver.metadata.forecast_times import rebadge_forecasts_as_latest_cycle
 from improver.utilities.cube_manipulation import MergeCubes
 

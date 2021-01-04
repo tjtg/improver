@@ -38,7 +38,7 @@ import numpy as np
 from iris.analysis.cartography import rotate_winds
 from scipy.ndimage import uniform_filter1d
 
-from improver import BasePlugin
+from improver.plugin import BasePlugin
 from improver.constants import R_WATER_VAPOUR
 from improver.metadata.constants.mo_attributes import MOSG_GRID_ATTRIBUTES
 from improver.metadata.utilities import generate_mandatory_attributes

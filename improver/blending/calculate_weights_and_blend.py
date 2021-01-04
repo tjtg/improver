@@ -34,7 +34,7 @@ import warnings
 
 import numpy as np
 
-from improver import BasePlugin
+from improver.plugin import BasePlugin
 from improver.blending.spatial_weights import SpatiallyVaryingWeightsFromMask
 from improver.blending.weighted_blend import (
     MergeCubesForWeightedBlending,

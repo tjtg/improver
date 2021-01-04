@@ -34,7 +34,7 @@ opposed to collapsing the whole dimension."""
 import iris
 from cf_units import Unit
 
-from improver import PostProcessingPlugin
+from improver.plugin import PostProcessingPlugin
 from improver.blending.weighted_blend import WeightedBlendAcrossWholeDimension
 from improver.blending.weights import ChooseDefaultWeightsTriangular
 

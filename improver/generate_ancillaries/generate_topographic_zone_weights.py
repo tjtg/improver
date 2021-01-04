@@ -37,7 +37,7 @@ import numpy as np
 from cf_units import Unit
 from iris.exceptions import InvalidCubeError
 
-from improver import BasePlugin
+from improver.plugin import BasePlugin
 from improver.generate_ancillaries.generate_ancillary import (
     GenerateOrographyBandAncils,
     _make_mask_cube,

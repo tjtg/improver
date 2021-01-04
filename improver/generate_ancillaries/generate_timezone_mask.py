@@ -41,7 +41,7 @@ from cf_units import Unit
 from iris.exceptions import CoordinateNotFoundError
 from pytz import timezone
 
-from improver import BasePlugin
+from improver.plugin import BasePlugin
 from improver.metadata.constants.time_types import TIME_COORDS
 from improver.metadata.utilities import (
     create_new_diagnostic_cube,

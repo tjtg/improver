@@ -34,7 +34,7 @@
 import iris
 import numpy as np
 
-from improver import PostProcessingPlugin
+from improver.plugin import PostProcessingPlugin
 from improver.spotdata.spot_extraction import SpotExtraction, check_grid_match
 
 

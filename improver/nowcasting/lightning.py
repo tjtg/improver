@@ -35,7 +35,7 @@ import iris
 import numpy as np
 from iris.exceptions import ConstraintMismatchError
 
-from improver import PostProcessingPlugin
+from improver.plugin import PostProcessingPlugin
 from improver.metadata.probabilistic import find_threshold_coordinate
 from improver.nbhood.nbhood import NeighbourhoodProcessing
 from improver.utilities.cube_checker import check_cube_coordinates

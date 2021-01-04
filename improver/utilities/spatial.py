@@ -39,7 +39,7 @@ from iris.coords import CellMethod
 from iris.cube import Cube, CubeList
 from scipy.ndimage.filters import maximum_filter
 
-from improver import BasePlugin, PostProcessingPlugin
+from improver.plugin import BasePlugin, PostProcessingPlugin
 from improver.metadata.constants.attributes import MANDATORY_ATTRIBUTE_DEFAULTS
 from improver.metadata.utilities import create_new_diagnostic_cube
 from improver.utilities.cube_checker import check_cube_coordinates

@@ -34,7 +34,7 @@ import warnings
 import iris
 import numpy as np
 
-from improver import PostProcessingPlugin
+from improver.plugin import PostProcessingPlugin
 from improver.generate_ancillaries.generate_orographic_smoothing_coefficients import (
     OrographicSmoothingCoefficients,
 )

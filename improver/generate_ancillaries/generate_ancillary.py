@@ -34,7 +34,7 @@ import iris
 import numpy as np
 from cf_units import Unit
 
-from improver import BasePlugin
+from improver.plugin import BasePlugin
 
 # The following dictionary defines the default orography altitude bands in
 # metres above/below sea level for which masks are required.

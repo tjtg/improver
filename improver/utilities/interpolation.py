@@ -37,7 +37,7 @@ import numpy as np
 from scipy.interpolate import griddata
 from scipy.spatial.qhull import QhullError
 
-from improver import BasePlugin
+from improver.plugin import BasePlugin
 
 
 def interpolate_missing_data(

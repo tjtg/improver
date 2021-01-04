@@ -33,7 +33,7 @@
 import iris
 import numpy as np
 
-from improver import PostProcessingPlugin
+from improver.plugin import PostProcessingPlugin
 from improver.constants import DEFAULT_PERCENTILES
 from improver.metadata.forecast_times import forecast_period_coord
 from improver.nbhood.circular_kernel import (

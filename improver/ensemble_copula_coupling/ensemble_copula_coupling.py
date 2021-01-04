@@ -39,7 +39,7 @@ import numpy as np
 from iris.exceptions import CoordinateNotFoundError, InvalidCubeError
 from scipy import stats
 
-from improver import BasePlugin
+from improver.plugin import BasePlugin
 from improver.calibration.utilities import convert_cube_data_to_2d
 from improver.ensemble_copula_coupling.utilities import (
     choose_set_of_percentiles,

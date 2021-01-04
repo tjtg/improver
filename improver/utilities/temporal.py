@@ -41,7 +41,7 @@ from iris.coords import AuxCoord
 from iris.cube import CubeList
 from iris.time import PartialDateTime
 
-from improver import PostProcessingPlugin
+from improver.plugin import PostProcessingPlugin
 from improver.metadata.check_datatypes import enforce_dtype
 from improver.metadata.constants.time_types import TIME_COORDS
 from improver.metadata.utilities import (
