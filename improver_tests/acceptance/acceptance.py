@@ -239,7 +239,6 @@ def download_missing_files(cli_arglist):
     for missing_path in missing_paths:
         expected_checksum = checksums[missing_path.resolve().relative_to(kgo_root())]
         data_url = url_prefix + str(expected_checksum)
-        print(f"downloading {data_url} -> {missing_path}")
         missing_path.parent.mkdir(parents=True, exist_ok=True)
         # some firewalls block the default urllib user agent, so set a custom one
         req = urllib.request.Request(
@@ -264,7 +263,6 @@ def download_missing_files(cli_arglist):
             temporary.flush()
             os.fsync(temporary.fileno())
         os.rename(temp_name, missing_path)
-        print(f"download completed ok, hash {response_hash} matches")
 
 
 def checksum_ignore():

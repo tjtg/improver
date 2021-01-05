@@ -104,7 +104,7 @@ jobs:
       if: env.IMPROVER_ACC_TEST_DOWNLOAD
       run: |
         mkdir ${{ env.IMPROVER_ACC_TEST_DIR }}
-        pytest -m "acc and not checksum"
+        pytest -m "acc and not checksum" -v
       env:
         IMPROVER_ACC_TEST_DOWNLOAD: ${{ secrets.IMPROVER_ACC_TEST_DOWNLOAD }}
         IMPROVER_ACC_TEST_DIR: /home/runner/improver_tests
