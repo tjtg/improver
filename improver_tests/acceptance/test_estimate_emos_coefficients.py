@@ -58,6 +58,21 @@ COMPARE_EMOS_TOLERANCE = EST_EMOS_TOLERANCE * 10
 # Pre-convert to string for easier use in each test
 EST_EMOS_TOL = str(EST_EMOS_TOLERANCE)
 
+SCREEN_TEMP = "temperature_at_screen_level"
+WINDSPEED = "horizontal_wind_speed_at_10m"
+
+
+def history_truth_datafiles(kgo_dir, param=SCREEN_TEMP):
+    history_paths = [
+        kgo_dir / f"history/2017060{d}T0300Z-PT0012H-{param}.nc"
+        for d in (2, 3, 4)
+    ]
+    truth_paths = [
+        kgo_dir / f"truth/2017060{d}T1500Z-PT0000H-{param}.nc" for d in (2, 3, 4)
+    ]
+    all_paths = history_paths + truth_paths
+    return all_paths
+
 
 @pytest.mark.slow
 def test_normal(tmp_path):
@@ -67,12 +82,10 @@ def test_normal(tmp_path):
     """
     kgo_dir = acc.kgo_root() / "estimate-emos-coefficients/normal"
     kgo_path = kgo_dir / "kgo.nc"
-    history_path = kgo_dir / "history/*.nc"
-    truth_path = kgo_dir / "truth/*.nc"
+    history_truth_paths = history_truth_datafiles(kgo_dir)
     output_path = tmp_path / "output.nc"
     args = [
-        history_path,
-        truth_path,
+        *history_truth_paths,
         "--distribution",
         "norm",
         "--truth-attribute",
@@ -96,12 +109,11 @@ def test_truncated_normal(tmp_path):
     """
     kgo_dir = acc.kgo_root() / "estimate-emos-coefficients/truncated_normal"
     kgo_path = kgo_dir / "kgo.nc"
-    history_path = kgo_dir / "history/*.nc"
-    truth_path = kgo_dir / "truth/*.nc"
+    history_truth_paths = history_truth_datafiles(
+        kgo_dir, WINDSPEED)
     output_path = tmp_path / "output.nc"
     args = [
-        history_path,
-        truth_path,
+        *history_truth_paths,
         "--distribution",
         "truncnorm",
         "--truth-attribute",
@@ -122,12 +134,10 @@ def test_units(tmp_path):
     """Test prescribed units that may not match inputs"""
     kgo_dir = acc.kgo_root() / "estimate-emos-coefficients/normal"
     kgo_path = kgo_dir / "kgo.nc"
-    history_path = kgo_dir / "history/*.nc"
-    truth_path = kgo_dir / "truth/*.nc"
+    history_truth_paths = history_truth_datafiles(kgo_dir)
     output_path = tmp_path / "output.nc"
     args = [
-        history_path,
-        truth_path,
+        *history_truth_paths,
         "--distribution",
         "norm",
         "--truth-attribute",
@@ -151,12 +161,10 @@ def test_using_realizations_as_predictor_no_sm(tmp_path):
     """Test using non-default predictor realizations"""
     kgo_dir = acc.kgo_root() / "estimate-emos-coefficients"
     kgo_path = kgo_dir / "realizations/without_statsmodels_kgo.nc"
-    history_path = kgo_dir / "normal/history/*.nc"
-    truth_path = kgo_dir / "normal/truth/*.nc"
+    history_truth_paths = history_truth_datafiles(kgo_dir / "normal")
     output_path = tmp_path / "output.nc"
     args = [
-        history_path,
-        truth_path,
+        *history_truth_paths,
         "--distribution",
         "norm",
         "--truth-attribute",
@@ -181,12 +189,10 @@ def test_using_realizations_as_predictor_sm(tmp_path):
     """Test using non-default predictor realizations"""
     kgo_dir = acc.kgo_root() / "estimate-emos-coefficients"
     kgo_path = kgo_dir / "realizations/with_statsmodels_kgo.nc"
-    history_path = kgo_dir / "normal/history/*.nc"
-    truth_path = kgo_dir / "normal/truth/*.nc"
+    history_truth_paths = history_truth_datafiles(kgo_dir)
     output_path = tmp_path / "output.nc"
     args = [
-        history_path,
-        truth_path,
+        *history_truth_paths,
         "--distribution",
         "norm",
         "--truth-attribute",
@@ -212,12 +218,10 @@ def test_land_points_only(tmp_path):
     kgo_dir = acc.kgo_root() / "estimate-emos-coefficients"
     kgo_path = kgo_dir / "normal/land_only_kgo.nc"
     lsmask_path = kgo_dir / "landmask.nc"
-    history_path = kgo_dir / "normal/history/*.nc"
-    truth_path = kgo_dir / "normal/truth/*.nc"
+    history_truth_paths = history_truth_datafiles(kgo_dir / "normal")
     output_path = tmp_path / "output.nc"
     args = [
-        history_path,
-        truth_path,
+        *history_truth_paths,
         lsmask_path,
         "--distribution",
         "norm",

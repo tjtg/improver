@@ -58,7 +58,7 @@ def test_multiple_tables(tmp_path):
     """
     kgo_dir = acc.kgo_root() / "aggregate-reliability-tables/basic"
     kgo_path = kgo_dir / "multiple_tables_kgo.nc"
-    input_paths = sorted(kgo_dir.glob("reliability_table*.nc"))
+    input_paths = [kgo_dir / f"reliability_table{n}.nc" for n in ("", "_2")]
     output_path = tmp_path / "output.nc"
     args = [*input_paths, "--output", output_path]
     run_cli(args)

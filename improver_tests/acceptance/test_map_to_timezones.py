@@ -51,10 +51,18 @@ def test_basic(tmp_path, grid):
 
     kgo_dir = acc.kgo_root() / f"map-to-timezones/{grid}/"
     kgo_path = kgo_dir / "kgo.nc"
-    input_path = kgo_dir / "input_*.nc"
+    if grid == "uk":
+        input_paths = [
+            kgo_dir / f"input_202012{dth}00Z.nc"
+            for dth in ("02T23", "03T00", "03T01", "03T02")
+        ]
+    else:  # grid = global
+        input_paths = [
+            kgo_dir / f"input_202012{dth}00Z.nc" for dth in ("02T18", "03T06")
+        ]
     timezone_path = kgo_dir / "timezone_mask.nc"
     local_time = "20201203T0000"
     output_path = tmp_path / "output.nc"
-    args = [timezone_path, local_time, input_path, "--output", output_path]
+    args = [timezone_path, local_time, *input_paths, "--output", output_path]
     run_cli(args)
     acc.compare(output_path, kgo_path)

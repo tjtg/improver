@@ -46,7 +46,7 @@ def test_basic(tmp_path):
     kgo_dir = acc.kgo_root() / f"{CLI}/basic"
     kgo_path = kgo_dir / "kgo.nc"
     input_dir = kgo_dir
-    input_paths = sorted((input_dir.glob("??00Z_precip_rate.nc")))
+    input_paths = [input_dir / f"{hh}00Z_precip_rate.nc" for hh in ("09", "10")]
     output_path = tmp_path / "output.nc"
     args = [
         "--cycletime",

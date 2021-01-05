@@ -199,10 +199,7 @@ def verify_checksums(cli_arglist):
     """
     path_args = filter_cli_file_args(cli_arglist)
     for arg in path_args:
-        # expand any globs in the argument and verify each of them
-        arg_globs = list(arg.parent.glob(arg.name))
-        for arg_glob in arg_globs:
-            verify_checksum(arg_glob)
+        verify_checksum(arg)
 
 
 def filter_cli_file_args(cli_arglist):

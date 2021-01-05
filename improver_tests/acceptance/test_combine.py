@@ -35,6 +35,8 @@ import pytest
 from . import acceptance as acc
 
 pytestmark = [pytest.mark.acc, acc.skip_if_kgo_missing]
+SCREEN_TEMP = "temperature_at_screen_level"
+RAIN_ACCUM = "rainfall_accumulation"
 CLI = acc.cli_name_with_dashes(__file__)
 run_cli = acc.run_cli(CLI)
 
@@ -60,14 +62,20 @@ def test_basic(tmp_path):
     acc.compare(output_path, kgo_path)
 
 
-@pytest.mark.parametrize("minmax", ("min", "max"))
+def combine_kgos(kgo_dir, param, suffix=""):
+    times = [f"20180101T0{h}00Z-PT000{h}H" for h in (1, 2, 3)]
+    temperatures = [kgo_dir / f"{time}-{param}{suffix}.nc" for time in times]
+    return temperatures
+
+
+@pytest.mark.parametrize("minmax", ("_min", "_max"))
 def test_minmax_temperatures(tmp_path, minmax):
     """Test combining minimum and maximum temperatures"""
     kgo_dir = acc.kgo_root() / "combine/bounds"
-    kgo_path = kgo_dir / f"kgo_{minmax}.nc"
-    temperatures = sorted(kgo_dir.glob(f"*temperature_at_screen_level_{minmax}.nc"))
+    kgo_path = kgo_dir / f"kgo{minmax}.nc"
+    temperatures = combine_kgos(kgo_dir, SCREEN_TEMP, minmax)
     output_path = tmp_path / "output.nc"
-    args = ["--operation", f"{minmax}", *temperatures, "--output", f"{output_path}"]
+    args = ["--operation", f"{minmax[1:]}", *temperatures, "--output", f"{output_path}"]
     run_cli(args)
     acc.compare(output_path, kgo_path)
 
@@ -76,7 +84,7 @@ def test_combine_accumulation(tmp_path):
     """Test combining precipitation accumulations"""
     kgo_dir = acc.kgo_root() / "combine/accum"
     kgo_path = kgo_dir / "kgo_accum.nc"
-    rains = sorted(kgo_dir.glob("*rainfall_accumulation.nc"))
+    rains = combine_kgos(kgo_dir, RAIN_ACCUM)
     output_path = tmp_path / "output.nc"
     args = [*rains, "--output", f"{output_path}"]
     run_cli(args)
@@ -87,7 +95,7 @@ def test_mean_temperature(tmp_path):
     """Test combining mean temperature"""
     kgo_dir = acc.kgo_root() / "combine/bounds"
     kgo_path = kgo_dir / "kgo_mean.nc"
-    temperatures = sorted(kgo_dir.glob("*temperature_at_screen_level.nc"))
+    temperatures = combine_kgos(kgo_dir, SCREEN_TEMP)
     output_path = tmp_path / "output.nc"
     args = ["--operation", "mean", *temperatures, "--output", f"{output_path}"]
     run_cli(args)
@@ -98,7 +106,7 @@ def test_midpoint(tmp_path):
     """Test option to use midpoint of expanded coordinates"""
     kgo_dir = acc.kgo_root() / "combine/bounds"
     kgo_path = kgo_dir / "kgo_midpoint.nc"
-    temperatures = sorted(kgo_dir.glob("*temperature_at_screen_level.nc"))
+    temperatures = combine_kgos(kgo_dir, SCREEN_TEMP)
     output_path = tmp_path / "output.nc"
     args = [
         "--operation",

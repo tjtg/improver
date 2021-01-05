@@ -58,8 +58,9 @@ def test_basic(tmp_path):
 def test_too_many_files(tmp_path):
     """Test convection-ratio rejects more than two files"""
     kgo_dir = acc.kgo_root() / f"{CLI}/basic"
-    param_paths = [kgo_dir / f"{p}.nc" for p in ALL_PARAMS + ["kgo.nc"]]
+    param_paths = [kgo_dir / f"{p}.nc" for p in ALL_PARAMS + ["kgo"]]
     output_path = tmp_path / "output.nc"
+    print(param_paths)
     args = [*param_paths, "--output", output_path]
     with pytest.raises(IOError):
         run_cli(args)

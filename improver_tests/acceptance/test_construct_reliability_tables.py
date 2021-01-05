@@ -46,12 +46,12 @@ def test_no_single_value_bins(tmp_path):
     """
     kgo_dir = acc.kgo_root() / "construct-reliability-tables/basic"
     kgo_path = kgo_dir / "kgo_without_single_value_bins.nc"
-    history_path = kgo_dir / "forecast*.nc"
-    truth_path = kgo_dir / "truth*.nc"
+    history_paths = [kgo_dir / f"forecast_{n}.nc" for n in (0, 1)]
+    truth_paths = [kgo_dir / f"truth_{n}.nc" for n in (0, 1)]
     output_path = tmp_path / "output.nc"
     args = [
-        history_path,
-        truth_path,
+        *history_paths,
+        *truth_paths,
         "--truth-attribute",
         "mosg__model_configuration=uk_det",
         "--output",
@@ -68,12 +68,12 @@ def test_single_value_bins(tmp_path):
     """
     kgo_dir = acc.kgo_root() / "construct-reliability-tables/basic"
     kgo_path = kgo_dir / "kgo_single_value_bins.nc"
-    history_path = kgo_dir / "forecast*.nc"
-    truth_path = kgo_dir / "truth*.nc"
+    history_paths = [kgo_dir / f"forecast_{n}.nc" for n in (0, 1)]
+    truth_paths = [kgo_dir / f"truth_{n}.nc" for n in (0, 1)]
     output_path = tmp_path / "output.nc"
     args = [
-        history_path,
-        truth_path,
+        *history_paths,
+        *truth_paths,
         "--truth-attribute",
         "mosg__model_configuration=uk_det",
         "--single-value-lower-limit",

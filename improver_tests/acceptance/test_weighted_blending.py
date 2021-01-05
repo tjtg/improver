@@ -32,6 +32,7 @@
 Tests for the weighted-blending CLI
 """
 
+from .test_blend_adjacent_points import multi_prob_rain
 import pytest
 
 from . import acceptance as acc
@@ -48,7 +49,7 @@ def test_basic_nonlin(tmp_path):
     kgo_dir = acc.kgo_root() / "weighted_blending/basic_nonlin"
     kgo_path = kgo_dir / "kgo.nc"
     input_dir = kgo_dir / "../basic_lin"
-    input_paths = sorted((input_dir.glob("multiple_probabilities_rain_*H.nc")))
+    input_paths = multi_prob_rain(input_dir)
     output_path = tmp_path / "output.nc"
     args = [
         "--coordinate",
@@ -72,7 +73,7 @@ def test_basic_lin(tmp_path):
     """Test basic linear weights"""
     kgo_dir = acc.kgo_root() / "weighted_blending/basic_lin"
     kgo_path = kgo_dir / "kgo.nc"
-    input_paths = sorted((kgo_dir.glob("multiple_probabilities_rain_*H.nc")))
+    input_paths = multi_prob_rain(kgo_dir)
     output_path = tmp_path / "output.nc"
     args = [
         "--coordinate",
@@ -94,7 +95,7 @@ def test_basic_lin(tmp_path):
 def test_bothoptions_fail(tmp_path):
     """Test linear and non linear options together fails"""
     kgo_dir = acc.kgo_root() / "weighted_blending/basic_lin"
-    input_paths = sorted((kgo_dir.glob("multiple_probabilities_rain_*H.nc")))
+    input_paths = input_paths = multi_prob_rain(kgo_dir)
     output_path = tmp_path / "output.nc"
     args = [
         "--coordinate",
@@ -112,7 +113,7 @@ def test_bothoptions_fail(tmp_path):
 def test_invalid_lin_nonlin(tmp_path):
     """Test linear and non linear options together fails"""
     kgo_dir = acc.kgo_root() / "weighted_blending/basic_lin"
-    input_paths = sorted((kgo_dir.glob("multiple_probabilities_rain_*H.nc")))
+    input_paths = multi_prob_rain(kgo_dir)
     output_path = tmp_path / "output.nc"
     args = [
         "--coordinate",
@@ -132,7 +133,7 @@ def test_invalid_lin_nonlin(tmp_path):
 def test_invalid_nonlin_lin(tmp_path):
     """Test linear and non linear options together fails"""
     kgo_dir = acc.kgo_root() / "weighted_blending/basic_lin"
-    input_paths = sorted((kgo_dir.glob("multiple_probabilities_rain_*H.nc")))
+    input_paths = multi_prob_rain(kgo_dir)
     output_path = tmp_path / "output.nc"
     args = [
         "--coordinate",
@@ -180,8 +181,7 @@ def test_cycletime_with_specified_frt(tmp_path):
     returned cube is user specified."""
     kgo_dir = acc.kgo_root() / "weighted_blending/cycletime"
     kgo_path = kgo_dir / "kgo_specified_frt.nc"
-    input_paths = sorted((kgo_dir.glob("input_temperature*.nc")))
-    input_paths.pop(-1)
+    input_paths = [kgo_dir / f"input_temperature_{n}.nc" for n in (0, 1)]
     output_path = tmp_path / "output.nc"
     args = [
         "--coordinate",
@@ -369,7 +369,7 @@ def test_accum_cycle_blend(tmp_path):
     """Test blending accumulation across cycle times"""
     kgo_dir = acc.kgo_root() / "weighted_blending/accum_cycle_blend"
     kgo_path = kgo_dir / "kgo.nc"
-    input_paths = sorted(kgo_dir.glob("ukv_prob_accum_PT?H.nc"))
+    input_paths = [kgo_dir / f"ukv_prob_accum_PT{h}H.nc" for h in (3, 4)]
     output_path = tmp_path / "output.nc"
     args = [
         "--coordinate",
