@@ -32,10 +32,10 @@
 Tests for the weighted-blending CLI
 """
 
-from .test_blend_adjacent_points import multi_prob_rain
 import pytest
 
 from . import acceptance as acc
+from .test_blend_adjacent_points import multi_prob_rain
 
 pytestmark = [pytest.mark.acc, acc.skip_if_kgo_missing]
 PRECIP = "lwe_precipitation_rate"

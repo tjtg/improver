@@ -64,8 +64,7 @@ WINDSPEED = "horizontal_wind_speed_at_10m"
 
 def history_truth_datafiles(kgo_dir, param=SCREEN_TEMP):
     history_paths = [
-        kgo_dir / f"history/2017060{d}T0300Z-PT0012H-{param}.nc"
-        for d in (2, 3, 4)
+        kgo_dir / f"history/2017060{d}T0300Z-PT0012H-{param}.nc" for d in (2, 3, 4)
     ]
     truth_paths = [
         kgo_dir / f"truth/2017060{d}T1500Z-PT0000H-{param}.nc" for d in (2, 3, 4)
@@ -109,8 +108,7 @@ def test_truncated_normal(tmp_path):
     """
     kgo_dir = acc.kgo_root() / "estimate-emos-coefficients/truncated_normal"
     kgo_path = kgo_dir / "kgo.nc"
-    history_truth_paths = history_truth_datafiles(
-        kgo_dir, WINDSPEED)
+    history_truth_paths = history_truth_datafiles(kgo_dir, WINDSPEED)
     output_path = tmp_path / "output.nc"
     args = [
         *history_truth_paths,

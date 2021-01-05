@@ -79,3 +79,30 @@ jobs:
       run:  safety check || true
     - name: bandit
       run:  bandit -r improver || true
+  Acceptance:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/cache@v1
+      id: cache
+      env:
+        # Increase this value to reset cache
+        CACHE_NUMBER: 0
+      with:
+        path: /usr/share/miniconda/envs/improver
+        key: ${{ runner.os }}-conda-improver-${{ env.CACHE_NUMBER }}-${{ hashFiles('**/environment.yml') }}
+        restore-keys: ${{ runner.OS }}-conda-improver-
+    - name: conda env update
+      if: steps.cache.outputs.cache-hit != 'true'
+      run: |
+        source '/usr/share/miniconda/etc/profile.d/conda.sh'
+        conda env update -q --file environment.yml --name improver
+        conda list --export
+    - name: conda activate
+      run:  echo "/usr/share/miniconda/envs/improver/bin" >>$GITHUB_PATH
+    - name: pytest acceptance
+      if: env.CODACY_PROJECT_TOKEN
+      run: pytest -m "acc and not checksum"
+      env:
+        IMPROVER_ACC_TEST_DOWNLOAD: ${{ secrets.IMPROVER_ACC_TEST_DOWNLOAD }}
+        IMPROVER_ACC_TEST_DIR: ${{ env.RUNNER_TEMP }}
