@@ -37,10 +37,10 @@ import os
 import pathlib
 import shlex
 import shutil
+import tempfile
 import urllib.request
 
 import pytest
-import filelock
 
 from improver import cli
 from improver.constants import DEFAULT_TOLERANCE
@@ -238,13 +238,13 @@ def download_missing_files(cli_arglist):
     path_args = filter_cli_file_args(cli_arglist)
     url_prefix = online_test_data()
     checksums = acceptance_checksums()
-    for path in path_args:
-        if path.exists():
-            continue
-        expected_checksum = checksums[path.resolve().relative_to(kgo_root())]
+    missing_paths = [path for path in path_args if not path.exists()]
+    for missing_path in missing_paths:
+        expected_checksum = checksums[missing_path.resolve().relative_to(kgo_root())]
         data_url = url_prefix + str(expected_checksum)
-        print(f"downloading {data_url} -> {path}")
-        path.parent.mkdir(parents=True, exist_ok=True)
+        print(f"downloading {data_url} -> {missing_path}")
+        missing_path.parent.mkdir(parents=True, exist_ok=True)
+        # some firewalls block the default urllib user agent, so set a custom one
         req = urllib.request.Request(
             data_url, headers={"User-Agent": "IMPROVER acceptance test"}
         )
@@ -258,18 +258,16 @@ def download_missing_files(cli_arglist):
                     f"downloaded data checksum mismatch,"
                     f"expected {expected_checksum} got {response_hash}"
                 )
-        lock_path = str(path.with_suffix(".lock"))
-        lock = filelock.FileLock(lock_path)
-        lock.acquire(timeout=10)
-        try:
-            with open(path, "wb") as out_file:
-                out_file.write(data)
-            print("download completed ok")
-        except filelock.Timeout:
-            raise IOError(f'unable to lock {path} for writing')
-        finally:
-            lock.release()
-
+        # write to a temporary file to avoid conflicts if running in parallel
+        _, temp_name = tempfile.mkstemp(
+            dir=missing_path.parent, prefix=missing_path.name
+        )
+        with open(temp_name, "wb") as temporary:
+            temporary.write(data)
+            temporary.flush()
+            os.fsync(temporary.fileno())
+        os.rename(temp_name, missing_path)
+        print(f"download completed ok, hash {response_hash} matches")
 
 
 def checksum_ignore():
