@@ -102,7 +102,9 @@ jobs:
       run:  echo "/usr/share/miniconda/envs/improver/bin" >>$GITHUB_PATH
     - name: pytest acceptance
       if: env.IMPROVER_ACC_TEST_DOWNLOAD
-      run: pytest -m "acc and not checksum"
+      run: |
+        mkdir ${{ env.IMPROVER_ACC_TEST_DIR }}
+        pytest -m "acc and not checksum"
       env:
         IMPROVER_ACC_TEST_DOWNLOAD: ${{ secrets.IMPROVER_ACC_TEST_DOWNLOAD }}
-        IMPROVER_ACC_TEST_DIR: ${{ env.RUNNER_TEMP }}
+        IMPROVER_ACC_TEST_DIR: /home/runner/improver_tests
