@@ -262,7 +262,9 @@ def download_missing_files(cli_arglist):
             temporary.write(data)
             temporary.flush()
             os.fsync(temporary.fileno())
-        os.rename(temp_name, missing_path)
+        # temporary file gets flushed/synced/closed above
+        # rename below should be atomic according to POSIX semantics
+        os.replace(temp_name, missing_path)
 
 
 def checksum_ignore():

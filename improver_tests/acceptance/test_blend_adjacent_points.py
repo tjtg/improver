@@ -39,12 +39,14 @@ CLI = acc.cli_name_with_dashes(__file__)
 run_cli = acc.run_cli(CLI)
 
 
-def multi_prob_rain(kgo_dir):
+def blend_inputs_rain(kgo_dir):
+    """Input filenames for rain dataset"""
     multi_prob = [kgo_dir / f"multiple_probabilities_rain_{h}H.nc" for h in (1, 2, 3)]
     return multi_prob
 
 
-def multi_prob_wind(kgo_dir):
+def blend_inputs_wind(kgo_dir):
+    """Input filenames for wind dataset"""
     multi_prob = [
         kgo_dir / f"20180914T0{h+3}00Z-PT000{h}H00M-wind_gust_at_10m_max-PT01H.nc"
         for h in (3, 4, 5)
@@ -56,7 +58,7 @@ def test_basic_mean(tmp_path):
     """Test basic blend-adjacent-points usage"""
     kgo_dir = acc.kgo_root() / "blend-adjacent-points/basic_mean"
     kgo_path = kgo_dir / "kgo.nc"
-    multi_prob = multi_prob_rain(kgo_dir)
+    multi_prob = blend_inputs_rain(kgo_dir)
     output_path = tmp_path / "output.nc"
     args = [
         "--coordinate",
@@ -79,7 +81,7 @@ def test_time_bounds(tmp_path):
     """Test triangular time blending with matched time bounds"""
     kgo_dir = acc.kgo_root() / "blend-adjacent-points/time_bounds"
     kgo_path = kgo_dir / "kgo.nc"
-    multi_prob = multi_prob_wind(kgo_dir)
+    multi_prob = blend_inputs_wind(kgo_dir)
     output_path = tmp_path / "output.nc"
     args = [
         "--coordinate",
@@ -101,7 +103,7 @@ def test_time_bounds(tmp_path):
 def test_mismatched_bounds_ranges(tmp_path):
     """Test triangular time blending with mismatched time bounds"""
     kgo_dir = acc.kgo_root() / "blend-adjacent-points/basic_mean"
-    multi_prob = multi_prob_rain(kgo_dir)
+    multi_prob = blend_inputs_rain(kgo_dir)
     output_path = tmp_path / "output.nc"
     args = [
         "--coordinate",
@@ -124,7 +126,7 @@ def test_mismatched_bounds_ranges(tmp_path):
 def test_mismatched_args(tmp_path):
     """Test triangular time blending with inappropriate arguments"""
     kgo_dir = acc.kgo_root() / "blend-adjacent-points/basic_mean"
-    multi_prob = multi_prob_rain(kgo_dir)
+    multi_prob = blend_inputs_rain(kgo_dir)
     output_path = tmp_path / "output.nc"
     args = [
         "--coordinate",
@@ -147,7 +149,7 @@ def test_mismatched_args(tmp_path):
 def test_time(tmp_path):
     """Test time coordinate blending"""
     kgo_dir = acc.kgo_root() / "blend-adjacent-points/time_bounds"
-    multi_prob = multi_prob_wind(kgo_dir)
+    multi_prob = blend_inputs_wind(kgo_dir)
     output_path = tmp_path / "output.nc"
     args = [
         "--coordinate",

@@ -35,7 +35,7 @@ Tests for the weighted-blending CLI
 import pytest
 
 from . import acceptance as acc
-from .test_blend_adjacent_points import multi_prob_rain
+from .test_blend_adjacent_points import blend_inputs_rain
 
 pytestmark = [pytest.mark.acc, acc.skip_if_kgo_missing]
 PRECIP = "lwe_precipitation_rate"
@@ -49,7 +49,7 @@ def test_basic_nonlin(tmp_path):
     kgo_dir = acc.kgo_root() / "weighted_blending/basic_nonlin"
     kgo_path = kgo_dir / "kgo.nc"
     input_dir = kgo_dir / "../basic_lin"
-    input_paths = multi_prob_rain(input_dir)
+    input_paths = blend_inputs_rain(input_dir)
     output_path = tmp_path / "output.nc"
     args = [
         "--coordinate",
@@ -73,7 +73,7 @@ def test_basic_lin(tmp_path):
     """Test basic linear weights"""
     kgo_dir = acc.kgo_root() / "weighted_blending/basic_lin"
     kgo_path = kgo_dir / "kgo.nc"
-    input_paths = multi_prob_rain(kgo_dir)
+    input_paths = blend_inputs_rain(kgo_dir)
     output_path = tmp_path / "output.nc"
     args = [
         "--coordinate",
@@ -95,7 +95,7 @@ def test_basic_lin(tmp_path):
 def test_bothoptions_fail(tmp_path):
     """Test linear and non linear options together fails"""
     kgo_dir = acc.kgo_root() / "weighted_blending/basic_lin"
-    input_paths = input_paths = multi_prob_rain(kgo_dir)
+    input_paths = input_paths = blend_inputs_rain(kgo_dir)
     output_path = tmp_path / "output.nc"
     args = [
         "--coordinate",
@@ -113,7 +113,7 @@ def test_bothoptions_fail(tmp_path):
 def test_invalid_lin_nonlin(tmp_path):
     """Test linear and non linear options together fails"""
     kgo_dir = acc.kgo_root() / "weighted_blending/basic_lin"
-    input_paths = multi_prob_rain(kgo_dir)
+    input_paths = blend_inputs_rain(kgo_dir)
     output_path = tmp_path / "output.nc"
     args = [
         "--coordinate",
@@ -133,7 +133,7 @@ def test_invalid_lin_nonlin(tmp_path):
 def test_invalid_nonlin_lin(tmp_path):
     """Test linear and non linear options together fails"""
     kgo_dir = acc.kgo_root() / "weighted_blending/basic_lin"
-    input_paths = multi_prob_rain(kgo_dir)
+    input_paths = blend_inputs_rain(kgo_dir)
     output_path = tmp_path / "output.nc"
     args = [
         "--coordinate",
