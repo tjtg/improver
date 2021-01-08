@@ -38,9 +38,9 @@ import pathlib
 import shlex
 import shutil
 import tempfile
-import urllib.request
 
 import pytest
+import requests
 
 from improver import cli
 from improver.constants import DEFAULT_TOLERANCE
@@ -233,33 +233,28 @@ def filter_cli_file_args(cli_arglist):
 
 def download_missing_files(cli_arglist):
     path_args = filter_cli_file_args(cli_arglist)
-    url_prefix = online_test_data()
+    url_base = online_test_data()
     checksums = acceptance_checksums()
     missing_paths = [path for path in path_args if not path.exists()]
     for missing_path in missing_paths:
         expected_checksum = checksums[missing_path.resolve().relative_to(kgo_root())]
-        data_url = url_prefix + str(expected_checksum)
+        data_url = f"{url_base}/{expected_checksum}"
         missing_path.parent.mkdir(parents=True, exist_ok=True)
-        # some firewalls block the default urllib user agent, so set a custom one
-        req = urllib.request.Request(
-            data_url, headers={"User-Agent": "IMPROVER acceptance test"}
-        )
-        with urllib.request.urlopen(req, timeout=30) as response:
-            data = response.read()
-            hasher = hashlib.sha256()
-            hasher.update(data)
-            response_hash = hasher.hexdigest()
-            if response_hash != expected_checksum:
-                raise ValueError(
-                    f"downloaded data checksum mismatch,"
-                    f"expected {expected_checksum} got {response_hash}"
-                )
+        response = requests.get(data_url, timeout=5)
+        hasher = hashlib.sha256()
+        hasher.update(response.content)
+        response_hash = hasher.hexdigest()
+        if response_hash != expected_checksum:
+            raise ValueError(
+                f"downloaded data checksum mismatch,"
+                f"expected {expected_checksum} got {response_hash}"
+            )
         # write to a temporary file to avoid conflicts if running in parallel
         _, temp_name = tempfile.mkstemp(
             dir=missing_path.parent, prefix=missing_path.name
         )
         with open(temp_name, "wb") as temporary:
-            temporary.write(data)
+            temporary.write(response.content)
             temporary.flush()
             os.fsync(temporary.fileno())
         # temporary file gets flushed/synced/closed above

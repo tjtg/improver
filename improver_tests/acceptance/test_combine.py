@@ -40,6 +40,7 @@ RAIN_ACCUM = "rainfall_accumulation"
 CLI = acc.cli_name_with_dashes(__file__)
 run_cli = acc.run_cli(CLI)
 
+
 def combine_inputs(kgo_dir, param, suffix=""):
     """Input files for combine tests"""
     times = [f"20180101T0{h}00Z-PT000{h}H" for h in (1, 2, 3)]
