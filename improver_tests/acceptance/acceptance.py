@@ -238,9 +238,14 @@ def download_missing_files(cli_arglist):
     missing_paths = [path for path in path_args if not path.exists()]
     for missing_path in missing_paths:
         expected_checksum = checksums[missing_path.resolve().relative_to(kgo_root())]
-        data_url = f"{url_base}/{expected_checksum}"
+        data_url = requests.compat.urljoin(url_base, expected_checksum)
         missing_path.parent.mkdir(parents=True, exist_ok=True)
-        response = requests.get(data_url, timeout=5)
+        try:
+            response = requests.get(data_url, timeout=5)
+            response.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            pytest.skip(f'error {e} - unable to retrieve acceptance test data')
+            raise EnvironmentError(e)
         hasher = hashlib.sha256()
         hasher.update(response.content)
         response_hash = hasher.hexdigest()
